@@ -50,6 +50,7 @@ public class GT4500 implements SpaceShip {
   }
 
   private boolean fireMultipleTorpedo(){
+    // try to fire both torpedo stores if they have any torpedos
     boolean firingSuccess = false;
     if(! secondaryTorpedoStore.isEmpty()){
           firingSuccess = secondaryTorpedoStore.fire(1);
@@ -61,6 +62,7 @@ public class GT4500 implements SpaceShip {
   }
 
   private boolean fireSingleTorpedo(){
+    // try to fire the the torpedostores in an anltarnating pattern, unless one of them is empty, in wich case fire the available
     boolean firingSuccess = false;
     if (wasPrimaryFiredLast) {
           // try to fire the secondary first

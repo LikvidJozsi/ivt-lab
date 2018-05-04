@@ -38,9 +38,33 @@ public class GT4500 implements SpaceShip {
 
     boolean firingSuccess = false;
 
-    switch (firingMode) {
-      case SINGLE:
-        if (wasPrimaryFiredLast) {
+    if (firingMode==FiringMode.SINGLE) {
+        firingSuccess = fireSingleTorpedo();
+    }else{
+          // try to fire both of the torpedo stores
+          firingSuccess = fireMultipleTorpedo();
+          
+    }
+
+    return firingSuccess;
+  }
+
+  private boolean fireMultipleTorpedo(){
+    // try to fire both torpedo stores if they have any torpedos
+    boolean firingSuccess = false;
+    if(! secondaryTorpedoStore.isEmpty()){
+          firingSuccess = secondaryTorpedoStore.fire(1);
+        }
+        if(! primaryTorpedoStore.isEmpty()){
+          firingSuccess = primaryTorpedoStore.fire(1) || firingSuccess;
+        }
+    return firingSuccess;
+  }
+
+  private boolean fireSingleTorpedo(){
+    // try to fire the the torpedostores in an anltarnating pattern, unless one of them is empty, in wich case fire the available
+    boolean firingSuccess = false;
+    if (wasPrimaryFiredLast) {
           // try to fire the secondary first
           if (! secondaryTorpedoStore.isEmpty()) {
             firingSuccess = secondaryTorpedoStore.fire(1);
@@ -74,21 +98,7 @@ public class GT4500 implements SpaceShip {
             // if both of the stores are empty, nothing can be done, return failure
           }
         }
-        break;
-
-      case ALL:
-        // try to fire both of the torpedo stores
-        //TODO implement feature
-	if(! secondaryTorpedoStore.isEmpty()){
-		firingSuccess = secondaryTorpedoStore.fire(1);
-	}
-	if(! primaryTorpedoStore.isEmpty()){
-		firingSuccess = firingSuccess | primaryTorpedoStore.fire(1);
-	}
-        break;
-    }
-
-    return firingSuccess;
+      return firingSuccess;
   }
 
 }
